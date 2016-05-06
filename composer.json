@@ -1,0 +1,27 @@
+{
+	"name": "miptliot/vps-uploader",
+	"description": "File uploader.",
+	"type": "library",
+	"license": "MIT",
+	"homepage": "http://liot.mipt.ru",
+	"authors": [
+		{
+			"name": "Anna Manaenkova",
+			"email": "anna.manaenkova@phystech.edu"
+		}
+	],
+	"require": {
+		"yiisoft/yii2": ">=2.0.8",
+		"yiisoft/yii2-bootstrap": ">=2.0.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"vps\\uploader\\": ""
+		}
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0.x-dev"
+		}
+	}
+}
