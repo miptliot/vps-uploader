@@ -13,7 +13,7 @@ This is file uploader developed specially for CIET MIPT projects. You can use it
 * userID - If you want to relate some user table for this file, use this field.
 
 ## vu_log
-* guid - Relation to file guid.
+* fileGuid - Relation to file guid.
 * status - Last status changed.
 * message
 * dt - Datetime when status was changed.
