@@ -23,7 +23,7 @@
 				'userID'    => $this->integer()
 			], $tableOptions);
 
-			$this->addPrimaryKey('PRIMARY', 'vu_file', 'guid');
+			$this->addPrimaryKey('GUID', 'vu_file', 'guid');
 
 			$this->createTable('vu_log', [
 				'fileGuid' => $this->string(25)->notNull(),
