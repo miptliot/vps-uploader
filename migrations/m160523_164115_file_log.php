@@ -38,8 +38,8 @@
 
 		public function safeDown ()
 		{
-			echo "m160523_164115_file_log cannot be reverted.\n";
-
-			return false;
+			$this->dropForeignKey('vu_log_file', 'vu_log');
+			$this->dropTable('vu_log');
+			$this->dropTable('vu_file');
 		}
 	}
