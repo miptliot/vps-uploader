@@ -19,4 +19,9 @@ This is file uploader developed specially for CIET MIPT projects. You can use it
 * dt - Datetime when status was changed.
 * userID - User by which status was changed.
 
-# Functionality
+# Config
+
+**basepath** - Base path to store files. Must be writable. 
+**chunksize** - File chunk size in bytes to upload large files. Default is 1048576 (1M).
+**extensions** - Allowed extensions to load. If _null_ then any extension is allowed.
+**maxsize** - Maximum file size to upload. Default is _null_ (unlimited). If this value more than _upload_max_filesize_ or _post_max_size_, then minimum of these values will be used.
