@@ -9,9 +9,9 @@
 		 */
 		public function bootstrap ($app)
 		{
-			// Add module URL rules.
 			$app->getUrlManager()->addRules(
 				[
+					'<_m:uploader>'                             => '<_m>/base/index',
 					'<_m:uploader>/file'                        => '<_m>/file/index',
 					'<_m:uploader>/file/index'                  => '<_m>/file/index',
 					'<_m:uploader>/file/<page:[0-9]+>'          => '<_m>/file/index',
@@ -20,7 +20,6 @@
 				]
 			);
 
-			// Add module I18N category.
 			if (!isset( $app->i18n->translations[ 'vps/uploader' ] ) && !isset( $app->i18n->translations[ 'vps/*' ] ))
 			{
 				$app->i18n->translations[ 'vps/uploader' ] = [
