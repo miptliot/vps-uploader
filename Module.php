@@ -1,8 +1,10 @@
 <?php
 	namespace vps\uploader;
 
+	use vps\tools\helpers\HumanHelper;
 	use Yii;
 	use yii\base\BootstrapInterface;
+	use yii\base\InvalidConfigException;
 
 	class Module extends \yii\base\Module implements BootstrapInterface
 	{
@@ -14,7 +16,8 @@
 
 		/**
 		 * @var int
-		 * File chunk size in bytes to upload large files. Default is 1048576 (1M).
+		 * File chunk size in bytes to upload large files. Default is 1048576 (1M). This value must be less than
+		 * $maxsize.
 		 */
 		public $chunksize = 1048576;
 
@@ -26,10 +29,15 @@
 
 		/**
 		 * @var null|string
-		 * Maximum file size to upload. Default is _null_ (unlimited). If this value more than _upload_max_filesize_ or
-		 * _post_max_size_, then minimum of these values will be used. Format is like 128M.
+		 * Maximum file size to upload. Default is _null_ (unlimited). Format is like 128M.
 		 */
 		public $maxsize = null;
+
+		/**
+		 * @var int
+		 * Number of simultaneously uploads. Default is 1.
+		 */
+		public $simultaneous = 1;
 
 		/**
 		 * @inheritdoc
@@ -60,5 +68,26 @@
 					]
 				];
 			}
+		}
+
+		public function init ()
+		{
+			parent::init();
+			$this->checkParameters();
+		}
+
+		private function checkParameters ()
+		{
+			// Check basepath.
+			if (!is_dir($this->basepath))
+				throw new InvalidConfigException($this->basepath . ' is not a directory.');
+
+			if (!is_writable($this->basepath))
+				throw new InvalidConfigException($this->basepath . ' is not writable.');
+
+			// Check chunksize.
+			$bytes = HumanHelper::maxBytesUpload();
+			if ($this->chunksize >= $bytes)
+				throw new InvalidConfigException('Chunksize value must be less than ' . $bytes . 'B. Current value is ' . $this->chunksize . '.');
 		}
 	}
