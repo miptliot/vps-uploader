@@ -26,3 +26,6 @@ This is file uploader developed specially for CIET MIPT projects. You can use it
 **extensions** - Allowed extensions to load. If _null_ then any extension is allowed.
 **maxsize** - Maximum file size to upload. Default is _null_ (unlimited). Format is like 128M.
 **simultaneous** - Number of simultaneously uploads. Default is 1.
+
+# Requirements
+You should include [Flow.js](https://github.com/flowjs/flow.js) library and CSS and JS file from [Jasny Bootstrap](https://github.com/jasny/bootstrap/).

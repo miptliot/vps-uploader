@@ -1,1 +1,1 @@
-123
+{include file="../requirements.tpl"}
