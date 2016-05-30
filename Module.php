@@ -35,16 +35,16 @@
 
 		/**
 		 * @var int
-		 * Number of simultaneously uploads. Default is 1.
+		 * Number of simultaneously uploads. Default is 3.
 		 */
-		public $simultaneous = 1;
+		public $simultaneous = 3;
 
 		/**
 		 * @inheritdoc
 		 */
 		public function bootstrap ($app)
 		{
-			Yii::setAlias('uploader', __DIR__);
+			Yii::setAlias('vps-uploader', __DIR__);
 
 			$app->getUrlManager()->addRules(
 				[
@@ -59,12 +59,12 @@
 
 			if (!isset( $app->i18n->translations[ 'vps/uploader' ] ) && !isset( $app->i18n->translations[ 'vps/*' ] ))
 			{
-				$app->i18n->translations[ 'vps/uploader' ] = [
+				$app->i18n->translations[ 'vps-uploader' ] = [
 					'class'            => 'yii\i18n\PhpMessageSource',
-					'basePath'         => '@vps/uploader/messages',
+					'basePath'         => '@vps-uploader/messages',
 					'forceTranslation' => true,
 					'fileMap'          => [
-						'vps/uploader' => 'uploader.php',
+						'vps-uploader' => 'uploader.php',
 					]
 				];
 			}
