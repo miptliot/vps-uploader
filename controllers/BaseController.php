@@ -10,7 +10,7 @@
 		{
 			if (parent::beforeAction($action))
 			{
-				$this->setViewPath('@uploader/views');
+				$this->setViewPath('@vps-uploader/views');
 				$this->_tpl = $this->viewPath . '/' . $this->id . '/' . $this->action->id;
 
 				return true;

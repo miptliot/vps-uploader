@@ -5,6 +5,7 @@
 	{
 		public function actionAdd ()
 		{
+			$this->data('simultaneous', $this->module->simultaneous);
 		}
 
 		public function actionIndex ()
