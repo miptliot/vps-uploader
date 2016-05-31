@@ -1,5 +1,5 @@
 <?php
-	use \vps\db\Migration;
+	use \vps\tools\db\Migration;
 
 	class m160523_164115_file_log extends Migration
 	{
@@ -16,6 +16,7 @@
 				'guid'      => $this->string(25)->notNull(),
 				'path'      => $this->string(100),
 				'extension' => $this->string(10),
+				'size'      => $this->string(20),
 				'name'      => $this->string(100),
 				'status'    => 'enum("new", "uploading", "error", "deleted", "ok")  NOT NULL DEFAULT "new"',
 				'message'   => $this->text(),

@@ -50,6 +50,7 @@
 				{
 					$file->status = File::S_OK;
 					$file->path = $file->guid[ 0 ] . '/' . $file->guid[ 1 ] . '/' . $flow->savedFilename;
+					$file->size = (string)filesize($targetDir . '/' . $flow->savedFilename);
 					$file->save();
 				}
 				else

@@ -37,6 +37,8 @@
 			element.attr('id', 'vu-' + options.id);
 
 			this.id = options.id;
+			this.guid = null;
+			this.errors = [];
 
 			this.name = $('<span/>')
 				.addClass('vu-file-name')
@@ -70,6 +72,13 @@
 
 			return this;
 		};
+		File.prototype.addError = function (text) {
+			if (this.errors.length == 0) {
+				this.element.prepend($('<div/>').addClass('vu-file-errors').append('ul'));
+			}
+			this.errors.push(text);
+			this.element.find('.vu-file-errors ul').append($('<li/>').html(text));
+		};
 		File.prototype.progress = function (value) {
 			this._progress.set(value);
 		};
@@ -77,6 +86,16 @@
 			this.info.remove();
 			this._progress.remove();
 			this.element.remove();
+		};
+		File.prototype.status = function (name) {
+			this.element.removeClass(function (index, css) {
+				var m = css.match(/(^|\s)vu-file-status-\S+/g);
+				if (m == null)
+					return null;
+				else
+					return m.join(' ');
+			});
+			this.element.addClass('vu-file-status-' + name);
 		};
 
 		var humanSize = function (bytes, decimals) {
@@ -88,13 +107,32 @@
 			return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[ i ];
 		};
 
-		var progressFile = function (id, value) {
-			for (var i = 0; i < fileList.length; i++) {
-				if (fileList[ i ].id == id) {
-					fileList[ i ].progress(value);
-					break;
-				}
+		// Working wth files.
+		var clearFileList = function () {
+			for (var i = 0; i < flow.files.length; i++) {
+				flow.removeFile(flow.files[ i ]);
 			}
+			for (var i = 0; i < fileList.length; i++) {
+				fileList[ i ].remove();
+			}
+			fileList = [];
+			btnClear.attr('disabled', 'disabled');
+			btnUpload.attr('disabled', 'disabled');
+			btnSelect.children('span').html(options.messages.select);
+		};
+
+		var findFile = function (id) {
+			for (var i = 0; i < fileList.length; i++) {
+				if (fileList[ i ].id == id)
+					return fileList[ i ];
+			}
+			return null;
+		};
+
+		var progressFile = function (id, value) {
+			var f = findFile(id);
+			if (f != null)
+				f.progress(value);
 		};
 
 		var removeFile = function (id) {
@@ -111,19 +149,6 @@
 					fileList.splice(i, 1);
 				}
 			}
-		};
-
-		var clearFileList = function () {
-			for (var i = 0; i < flow.files.length; i++) {
-				flow.removeFile(flow.files[ i ]);
-			}
-			for (var i = 0; i < fileList.length; i++) {
-				fileList[ i ].remove();
-			}
-			fileList = [];
-			btnClear.attr('disabled', 'disabled');
-			btnUpload.attr('disabled', 'disabled');
-			btnSelect.children('span').html(options.messages.select);
 		};
 
 		var upload = function () {
@@ -200,8 +225,27 @@
 			}
 		});
 
+		flow.on('fileError', function (file, message, chunk) {
+			var file = findFile(f.uniqueIdentifier);
+			if (file != null) {
+				file.status('error');
+				file.addError(message);
+			}
+		});
+
 		flow.on('fileProgress', function (f) {
 			progressFile(f.uniqueIdentifier, parseInt(f.progress() * 100));
+		});
+
+		flow.on('fileSuccess', function (f, message, chunk) {
+			var file = findFile(f.uniqueIdentifier);
+			if (file != null) {
+				file.status('ok');
+				file.guid = message;
+			}
+		});
+
+		flow.on('complete', function () {
 		});
 
 		flow.assignBrowse(fileInput);

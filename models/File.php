@@ -11,6 +11,7 @@
 	 * @property string $message
 	 * @property string $name
 	 * @property string $path
+	 * @property string $size
 	 * @property string $status
 	 * @property int    $userID
 	 *
@@ -42,6 +43,7 @@
 				'path'      => Yii::tr('Path'),
 				'extension' => Yii::tr('Extension'),
 				'name'      => Yii::tr('Name'),
+				'size'      => Yii::tr('Size'),
 				'status'    => Yii::tr('Status'),
 				'message'   => Yii::tr('Message'),
 				'dt'        => Yii::tr('DT'),
@@ -73,6 +75,7 @@
 				[ [ 'dt' ], 'date', 'format' => 'y-MM-dd HH:mm:ss' ],
 				[ [ 'extension', 'guid', 'message', 'name', 'path' ], 'trim' ],
 				[ [ 'extension' ], 'string', 'max' => 10 ],
+				[ [ 'size' ], 'string', 'max' => 20 ],
 				[ [ 'guid' ], 'unique' ],
 				[ [ 'guid' ], 'required' ],
 				[ [ 'guid' ], 'string', 'length' => [ 1, 100 ] ],
