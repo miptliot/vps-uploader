@@ -62,7 +62,7 @@
 			var prEl = $('<div/>')
 				.addClass('vu-file-progress');
 
-			this.progress = new Progress(prEl);
+			this._progress = new Progress(prEl);
 
 			this.element = element
 				.append(this.info)
@@ -71,11 +71,11 @@
 			return this;
 		};
 		File.prototype.progress = function (value) {
-			this.progress.set(value);
+			this._progress.set(value);
 		};
 		File.prototype.remove = function () {
 			this.info.remove();
-			this.progress.remove();
+			this._progress.remove();
 			this.element.remove();
 		};
 
@@ -200,8 +200,7 @@
 			}
 		});
 
-		flow.on('fileProgess', function (f) {
-			console.log(f);
+		flow.on('fileProgress', function (f) {
 			progressFile(f.uniqueIdentifier, parseInt(f.progress() * 100));
 		});
 
