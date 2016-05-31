@@ -246,6 +246,10 @@
 		});
 
 		flow.on('complete', function () {
+			var guids = fileList.map(function (item) {
+				return item.guid;
+			});
+			window.location = '/uploader/file?list=' + guids.join(',');
 		});
 
 		flow.assignBrowse(fileInput);
