@@ -109,6 +109,9 @@
 				fileList[ i ].remove();
 			}
 			fileList = [];
+			btnClear.attr('disabled', 'disabled');
+			btnUpload.attr('disabled', 'disabled');
+			btnSelect.children('span').html(options.messages.select);
 		};
 
 		this.options = $.extend(true, {}, Uploader.defaults, options);
@@ -128,10 +131,19 @@
 			.html(options.messages.upload)
 			.attr('disabled', 'disabled');
 
+		var btnClear = $('<div/>')
+			.addClass('btn btn-warning')
+			.html(options.messages.clear)
+			.click(function () {
+				clearFileList();
+			})
+			.attr('disabled', 'disabled');
+
 		element.append($('<div/>')
 			.addClass('vu-controls')
 			.append(btnSelect)
 			.append(btnUpload)
+			.append(btnClear)
 		);
 
 		var flow = new Flow({
@@ -153,9 +165,12 @@
 				}));
 				element.append(c);
 			}
-			if (this.files.length == 0) {
+			if (fileList.length == 0) {
+				btnClear.attr('disabled', 'disabled');
+				btnUpload.attr('disabled', 'disabled');
 				btnSelect.children('span').html(options.messages.select);
 			} else {
+				btnClear.removeAttr('disabled');
 				btnUpload.removeAttr('disabled');
 				btnSelect.children('span').html(options.messages.add);
 			}
@@ -170,6 +185,7 @@
 		extensions : null,
 		messages : {
 			add : 'Add files',
+			clear : 'Clear list',
 			remove : 'Remove file',
 			select : 'Select files',
 			upload : 'Upload'
