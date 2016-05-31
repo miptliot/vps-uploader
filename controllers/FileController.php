@@ -5,6 +5,7 @@
 	use Yii;
 	use vps\tools\net\Flow;
 	use vps\uploader\models\File;
+	use yii\data\ActiveDataProvider;
 
 	class FileController extends BaseController
 	{
@@ -15,6 +16,39 @@
 
 		public function actionIndex ()
 		{
+			$query = File::find();
+
+			$provider = new ActiveDataProvider([
+				'query'      => $query,
+				'sort'       => [
+					'defaultOrder' => [
+						'dt' => SORT_DESC
+					]
+				],
+				'pagination' => [
+					'pageSize'       => 50,
+					'forcePageParam' => false,
+					'pageSizeParam'  => false,
+					'urlManager'     => new \yii\web\UrlManager([
+						'enablePrettyUrl' => true,
+						'showScriptName'  => false,
+						'rules'           => [
+							'uploader/file/<page>' => 'uploader/file/index'
+						]
+					])
+				]
+			]);
+
+			// Uploaded files.
+			$list = Yii::$app->request->get('list');
+			if ($list !== null)
+			{
+				$this->data('uploaded', File::find()->where([ 'guid' => explode(',', $list) ])->orderBy([ 'dt' => SORT_DESC ])->all());
+			}
+
+			// Common files list.
+			$this->data('files', $provider->models);
+			$this->data('pagination', $provider->pagination);
 		}
 
 		public function actionView ()
