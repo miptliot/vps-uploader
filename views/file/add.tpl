@@ -12,9 +12,10 @@
 			},
 			target : '{yii\helpers\Url::to([ "file/upload" ])}',
 			messages : {
-				change : '{Yii::t("vps-uploader", "Change")}',
+				add : '{Yii::t("vps-uploader", "Add files")}',
 				remove : '{Yii::t("vps-uploader", "Remove file")}',
-				select : '{Yii::t("vps-uploader", "Select files")}'
+				select : '{Yii::t("vps-uploader", "Select files")}',
+				upload : '{Yii::t("vps-uploader", "Upload")}',
 			}
 		});
 	});

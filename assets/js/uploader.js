@@ -101,6 +101,16 @@
 			}
 		};
 
+		var clearFileList = function () {
+			for (var i = 0; i < flow.files.length; i++) {
+				flow.removeFile(flow.files[ i ]);
+			}
+			for (var i = 0; i < fileList.length; i++) {
+				fileList[ i ].remove();
+			}
+			fileList = [];
+		};
+
 		this.options = $.extend(true, {}, Uploader.defaults, options);
 
 		var fileList = [];
@@ -110,12 +120,19 @@
 
 		var btnSelect = $('<div/>')
 			.addClass('btn btn-default vu-file-select')
-			.html(options.messages.select)
+			.html($('<span/>').html(options.messages.select))
 			.append(fileInput);
+
+		var btnUpload = $('<div/>')
+			.addClass('btn btn-primary')
+			.html(options.messages.upload)
+			.attr('disabled', 'disabled');
 
 		element.append($('<div/>')
 			.addClass('vu-controls')
-			.append(btnSelect));
+			.append(btnSelect)
+			.append(btnUpload)
+		);
 
 		var flow = new Flow({
 			target : options.target,
@@ -126,6 +143,7 @@
 		});
 
 		flow.on('filesAdded', function (files, e) {
+			btnUpload.attr('disabled', 'disabled');
 			for (var i = 0; i < files.length; i++) {
 				var c = $('<div/>').addClass('vu-file-item');
 				fileList.push(new File(c, {
@@ -135,10 +153,12 @@
 				}));
 				element.append(c);
 			}
-		});
-
-		flow.on('fileRemove', function (f) {
-			console.log(f);
+			if (this.files.length == 0) {
+				btnSelect.children('span').html(options.messages.select);
+			} else {
+				btnUpload.removeAttr('disabled');
+				btnSelect.children('span').html(options.messages.add);
+			}
 		});
 
 		flow.assignBrowse(fileInput);
@@ -149,9 +169,10 @@
 	Uploader.prototype.defaults = {
 		extensions : null,
 		messages : {
-			change : 'Change',
+			add : 'Add files',
 			remove : 'Remove file',
-			select : 'Select files'
+			select : 'Select files',
+			upload : 'Upload'
 		}
 	};
 
