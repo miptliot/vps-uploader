@@ -46,7 +46,7 @@
 				.addClass('vu-file-size')
 				.html(humanSize(options.size));
 
-			var removeBtn = $('<span/>')
+			this.btnRemove = $('<span/>')
 				.addClass('vu-file-remove')
 				.click(function () {
 					removeFile(options.id);
@@ -55,7 +55,7 @@
 
 			this.info = $('<div/>')
 				.addClass('vu-file-info')
-				.append(removeBtn)
+				.append(this.btnRemove)
 				.append(this.name)
 				.append(this.size);
 
@@ -70,6 +70,9 @@
 
 			return this;
 		};
+		File.prototype.progress = function (value) {
+			this.progress.set(value);
+		};
 		File.prototype.remove = function () {
 			this.info.remove();
 			this.progress.remove();
@@ -83,6 +86,15 @@
 			var sizes = [ 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' ];
 			var i = Math.floor(Math.log(bytes) / Math.log(k));
 			return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[ i ];
+		};
+
+		var progressFile = function (id, value) {
+			for (var i = 0; i < fileList.length; i++) {
+				if (fileList[ i ].id == id) {
+					fileList[ i ].progress(value);
+					break;
+				}
+			}
 		};
 
 		var removeFile = function (id) {
@@ -114,6 +126,15 @@
 			btnSelect.children('span').html(options.messages.select);
 		};
 
+		var upload = function () {
+			btnSelect.attr('disabled', 'disabled');
+			btnClear.attr('disabled', 'disabled');
+			btnUpload.attr('disabled', 'disabled');
+			for (var i = 0; i < fileList.length; i++)
+				fileList[ i ].btnRemove.remove();
+			flow.upload();
+		};
+
 		this.options = $.extend(true, {}, Uploader.defaults, options);
 
 		var fileList = [];
@@ -129,7 +150,10 @@
 		var btnUpload = $('<div/>')
 			.addClass('btn btn-primary')
 			.html(options.messages.upload)
-			.attr('disabled', 'disabled');
+			.attr('disabled', 'disabled')
+			.click(function () {
+				upload();
+			});
 
 		var btnClear = $('<div/>')
 			.addClass('btn btn-warning')
@@ -174,6 +198,11 @@
 				btnUpload.removeAttr('disabled');
 				btnSelect.children('span').html(options.messages.add);
 			}
+		});
+
+		flow.on('fileProgess', function (f) {
+			console.log(f);
+			progressFile(f.uniqueIdentifier, parseInt(f.progress() * 100));
 		});
 
 		flow.assignBrowse(fileInput);

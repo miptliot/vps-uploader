@@ -1,6 +1,7 @@
 <?php
 	namespace vps\uploader\models;
 
+	use vps\tools\helpers\TimeHelper;
 	use Yii;
 
 	/**
@@ -51,17 +52,32 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function beforeSave ($insert)
+		{
+			if (parent::beforeSave($insert))
+			{
+				$this->dt = TimeHelper::now();
+
+				return true;
+			}
+
+			return false;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function rules ()
 		{
 			return [
 				[ [ 'dt' ], 'date', 'format' => 'y-MM-dd HH:mm:ss' ],
 				[ [ 'extension', 'guid', 'message', 'name', 'path' ], 'trim' ],
-				[ [ 'extension' ], 'max' => 10 ],
+				[ [ 'extension' ], 'string', 'max' => 10 ],
 				[ [ 'guid' ], 'unique' ],
 				[ [ 'guid' ], 'required' ],
 				[ [ 'guid' ], 'string', 'length' => [ 1, 100 ] ],
 				[ [ 'message' ], 'string' ],
-				[ [ 'name', 'path' ], 'max' => 100 ],
+				[ [ 'name', 'path' ], 'string', 'max' => 100 ],
 				[ [ 'status' ], 'default', 'value' => self::S_NEW ],
 				[ [ 'status' ], 'in', 'range' => [ self::S_DELETED, self::S_ERROR, self::S_NEW, self::S_OK, self::S_UPLOADING ] ],
 				[ [ 'userID' ], 'integer' ]
