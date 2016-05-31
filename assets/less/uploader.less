@@ -1,5 +1,11 @@
-.vu-file
+.vu-controls
 {
+	margin-bottom: 15px;
+}
+
+.vu-file-select
+{
+	cursor: pointer;
 	overflow: hidden;
 	position: relative;
 
@@ -14,21 +20,37 @@
 	}
 }
 
-.vu-file-add-item
+.vu-file-item
 {
+	background: #f7f7f7;
+	border: 1px solid #ccc;
+	border-radius: 2px;
 	margin-bottom: 15px;
+	padding: 10px 10px;
+	&:hover
+	{
+		background: #e0e0e0;
+	}
 }
 
 .vu-file-info
 {
 	display: inline-block;
-	margin: 0 10px;
+	margin-bottom: 10px;
 }
 
 .vu-file-name
 {
 	font-weight: bold;
 	margin-left: 10px;
+}
+
+.vu-file-progress
+{
+	.progress
+	{
+		margin-bottom: 0;
+	}
 }
 
 .vu-file-size

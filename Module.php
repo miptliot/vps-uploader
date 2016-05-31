@@ -34,12 +34,6 @@
 		public $maxsize = null;
 
 		/**
-		 * @var int
-		 * Number of simultaneously uploads. Default is 3.
-		 */
-		public $simultaneous = 3;
-
-		/**
 		 * @inheritdoc
 		 */
 		public function bootstrap ($app)

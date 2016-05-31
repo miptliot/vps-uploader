@@ -28,101 +28,120 @@
 				.css('width', value + '%');
 			this.text.html(value + '%')
 		};
+		Progress.prototype.remove = function () {
+			this.bar.remove();
+			this.text.remove();
+		};
 
 		var File = function (element, options) {
-			this.options = options;
+			element.attr('id', 'vu-' + options.id);
 
-			this.input = $('<input/>')
-				.attr('type', 'file');
-
-			this.btn = $('<div/>')
-				.addClass('btn btn-default vu-file')
-				.append($('<span/>').html(this.options.messages.select))
-				.append(this.input);
+			this.id = options.id;
 
 			this.name = $('<span/>')
-				.addClass('vu-file-name');
+				.addClass('vu-file-name')
+				.html(options.name);
 
 			this.size = $('<span/>')
-				.addClass('vu-file-size');
+				.addClass('vu-file-size')
+				.html(humanSize(options.size));
 
-			var _self = this;
 			var removeBtn = $('<span/>')
 				.addClass('vu-file-remove')
 				.click(function () {
-					_self.remove();
+					removeFile(options.id);
 				})
-				.html('&times;')
-				.attr('title', this.options.messages.remove);
+				.html('&times;');
 
 			this.info = $('<div/>')
 				.addClass('vu-file-info')
 				.append(removeBtn)
 				.append(this.name)
-				.append(this.size)
-				.hide();
+				.append(this.size);
 
-			element
-				.append(this.btn)
-				.append(this.info);
+			var prEl = $('<div/>')
+				.addClass('vu-file-progress');
+
+			this.progress = new Progress(prEl);
+
+			this.element = element
+				.append(this.info)
+				.append(prEl);
 
 			return this;
 		};
-		File.prototype.clearData = function () {
-			this.info.hide();
-		};
-		File.prototype.setData = function (name, size) {
-			this.name.html(name);
-
-			this.size.html(humanSize(size));
-
-			this.btn.children('span').html(this.options.messages.change);
-
-			this.info.show();
-		};
 		File.prototype.remove = function () {
-			this.input.remove();
-			this.input = $('<input/>').attr('type', 'file');
-			this.btn.append(this.input);
-			this.btn.children('span').html(this.options.messages.select);
-
-			flow.removeFile(flow.files[ 0 ]);
-			flow.assignBrowse(this.input);
-
-			this.clearData();
+			this.info.remove();
+			this.progress.remove();
+			this.element.remove();
 		};
 
-		function humanSize (bytes, decimals) {
+		var humanSize = function (bytes, decimals) {
 			if (bytes == 0) return '0 Byte';
 			var k = 1024;
 			var dm = decimals + 1 || 3;
 			var sizes = [ 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' ];
 			var i = Math.floor(Math.log(bytes) / Math.log(k));
 			return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[ i ];
-		}
+		};
 
-		var progress = new Progress(element.find('.vu-progress'));
-		var file = new File(element.find('.vu-select'), {
-			messages : options.messages
-		});
+		var removeFile = function (id) {
+			for (var i = 0; i < flow.files.length; i++) {
+				if (flow.files[ i ].uniqueIdentifier == id) {
+					flow.removeFile(flow.files[ i ]);
+					break;
+				}
+			}
+
+			for (var i = 0; i < fileList.length; i++) {
+				if (fileList[ i ].id == id) {
+					fileList[ i ].remove();
+					fileList.splice(i, 1);
+				}
+			}
+		};
+
+		this.options = $.extend(true, {}, Uploader.defaults, options);
+
+		var fileList = [];
+
+		var fileInput = $('<input/>')
+			.attr('type', 'file');
+
+		var btnSelect = $('<div/>')
+			.addClass('btn btn-default vu-file-select')
+			.html(options.messages.select)
+			.append(fileInput);
+
+		element.append($('<div/>')
+			.addClass('vu-controls')
+			.append(btnSelect));
 
 		var flow = new Flow({
 			target : options.target,
 			uploadMethod : 'POST',
 			chunkSize : options.chunksize,
-			maxFiles : 1,
 			simultaneousUploads : 20,
 			query : options.query
 		});
 
-		flow.on('fileAdded', function (f, e) {
-			file.setData(f.name, f.size);
+		flow.on('filesAdded', function (files, e) {
+			for (var i = 0; i < files.length; i++) {
+				var c = $('<div/>').addClass('vu-file-item');
+				fileList.push(new File(c, {
+					id : files[ i ].uniqueIdentifier,
+					name : files[ i ].name,
+					size : files[ i ].size
+				}));
+				element.append(c);
+			}
 		});
-		flow.on('fileRemoved', function (f) {
 
+		flow.on('fileRemove', function (f) {
+			console.log(f);
 		});
 
-		flow.assignBrowse(file.input);
+		flow.assignBrowse(fileInput);
 
 		return this;
 	};
@@ -132,14 +151,13 @@
 		messages : {
 			change : 'Change',
 			remove : 'Remove file',
-			select : 'Select file'
+			select : 'Select files'
 		}
 	};
 
 	$.fn.uploader = function (options) {
 		return this.each(function () {
-			options = $.extend(true, {}, Uploader.prototype.defaults, options);
-			Uploader($(this), options);
+			new Uploader($(this), options);
 		});
 	};
 }(jQuery));

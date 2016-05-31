@@ -1,27 +1,20 @@
 {include file="../requirements.tpl"}
-<div class="vu-file-add">
-	{for $i=1 to $simultaneous}
-		<div class="vu-file-add-item row">
-			<div class="col-md-6 vu-select"></div>
-			<div class="col-md-6 vu-progress"></div>
-		</div>
-	{/for}
-</div>
+<div class="vu-file-add"></div>
 <script>
 	$(document).ready(function () {
 		if (!canUpload)
 			return;
 
-		$('.vu-file-add-item').uploader({
+		$('.vu-file-add').uploader({
 			chunksize : {$chunksize},
 			query : {
 				'{Yii::$app->request->csrfParam}' : '{Yii::$app->request->csrfToken}'
 			},
 			target : '{yii\helpers\Url::to([ "file/upload" ])}',
 			messages : {
-				change : '{Yii::tr("Change")}',
-				remove : '{Yii::tr("Remove file")}',
-				select : '{Yii::tr("Select file")}'
+				change : '{Yii::t("vps-uploader", "Change")}',
+				remove : '{Yii::t("vps-uploader", "Remove file")}',
+				select : '{Yii::t("vps-uploader", "Select files")}'
 			}
 		});
 	});
