@@ -17,7 +17,12 @@
 			query : {
 				'{Yii::$app->request->csrfParam}' : '{Yii::$app->request->csrfToken}'
 			},
-			target : '{yii\helpers\Url::to([ "file/upload" ])}'
+			target : '{yii\helpers\Url::to([ "file/upload" ])}',
+			messages : {
+				change : '{Yii::tr("Change")}',
+				remove : '{Yii::tr("Remove file")}',
+				select : '{Yii::tr("Select file")}'
+			}
 		});
 	});
 </script>

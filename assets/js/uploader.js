@@ -30,12 +30,14 @@
 		};
 
 		var File = function (element, options) {
+			this.options = options;
+
 			this.input = $('<input/>')
 				.attr('type', 'file');
 
 			this.btn = $('<div/>')
 				.addClass('btn btn-default vu-file')
-				.append($('<span/>').html('Select file'))
+				.append($('<span/>').html(this.options.messages.select))
 				.append(this.input);
 
 			this.name = $('<span/>')
@@ -51,7 +53,7 @@
 					_self.remove();
 				})
 				.html('&times;')
-				.attr('title', 'Remove file');
+				.attr('title', this.options.messages.remove);
 
 			this.info = $('<div/>')
 				.addClass('vu-file-info')
@@ -74,7 +76,7 @@
 
 			this.size.html(humanSize(size));
 
-			this.btn.children('span').html('Change file');
+			this.btn.children('span').html(this.options.messages.change);
 
 			this.info.show();
 		};
@@ -82,7 +84,7 @@
 			this.input.remove();
 			this.input = $('<input/>').attr('type', 'file');
 			this.btn.append(this.input);
-			this.btn.children('span').html('Select file');
+			this.btn.children('span').html(this.options.messages.select);
 
 			flow.removeFile(flow.files[ 0 ]);
 			flow.assignBrowse(this.input);
@@ -100,7 +102,9 @@
 		}
 
 		var progress = new Progress(element.find('.vu-progress'));
-		var file = new File(element.find('.vu-select'));
+		var file = new File(element.find('.vu-select'), {
+			messages : options.messages
+		});
 
 		var flow = new Flow({
 			target : options.target,
@@ -124,7 +128,12 @@
 	};
 
 	Uploader.prototype.defaults = {
-		extensions : null
+		extensions : null,
+		messages : {
+			change : 'Change',
+			remove : 'Remove file',
+			select : 'Select file'
+		}
 	};
 
 	$.fn.uploader = function (options) {
