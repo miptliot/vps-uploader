@@ -5,6 +5,7 @@
 	{
 		public function actionAdd ()
 		{
+			$this->data('chunksize', $this->module->chunksize);
 			$this->data('simultaneous', $this->module->simultaneous);
 		}
 
