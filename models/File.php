@@ -34,6 +34,15 @@
 		}
 
 		/**
+		 * Get full URL to the file.
+		 * @return string
+		 */
+		public function getUrl ()
+		{
+			return Yii::$app->request->hostInfo . Yii::$app->controller->module->url . '/' . $this->path;
+		}
+
+		/**
 		 * @inheritdoc
 		 */
 		public function attributeLabels ()

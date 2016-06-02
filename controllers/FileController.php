@@ -61,7 +61,7 @@
 
 		public function actionUpload ()
 		{
-			$datapath = $this->module->basepath;
+			$datapath = $this->module->path;
 
 			$flow = new Flow;
 			$flow->tmpDir = $datapath . '/tmp';
