@@ -68,6 +68,7 @@
 			if (parent::beforeSave($insert))
 			{
 				$this->dt = TimeHelper::now();
+				$this->extension = strtolower($this->extension);
 
 				return true;
 			}
