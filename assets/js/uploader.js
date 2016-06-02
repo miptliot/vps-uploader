@@ -200,7 +200,14 @@
 			uploadMethod : 'POST',
 			chunkSize : options.chunksize,
 			simultaneousUploads : 20,
-			query : options.query
+			query : options.query,
+			generateUniqueIdentifier : function () {
+				return $.ajax({
+					type : 'GET',
+					url : '/uploader/file/guid',
+					async : false
+				}).responseText;
+			}
 		});
 
 		flow.on('filesAdded', function (files, e) {
@@ -225,7 +232,7 @@
 			}
 		});
 
-		flow.on('fileError', function (file, message, chunk) {
+		flow.on('fileError', function (f, message, chunk) {
 			var file = findFile(f.uniqueIdentifier);
 			if (file != null) {
 				file.status('error');
@@ -241,7 +248,7 @@
 			var file = findFile(f.uniqueIdentifier);
 			if (file != null) {
 				file.status('ok');
-				file.guid = message;
+				file.guid = f.uniqueIdentifier;
 			}
 		});
 
