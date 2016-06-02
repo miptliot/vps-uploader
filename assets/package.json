@@ -1,0 +1,32 @@
+{
+  "name": "vps-uploader",
+  "version": "0.0.1",
+  "description": "File uploader for VPS projects of CIET MIPT.",
+  "main": "gruntfile.js",
+  "keywords": [
+    "uploader",
+    "file",
+    "video",
+    "mipt",
+    "ciet",
+    "flow"
+  ],
+  "author": "Anna Manaenkova <anna.manaenkova@phystech.edu>",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-less": "^1.3.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0"
+  },
+  "lessc": {
+    "paths": [
+      "bower_components",
+      "../../vendor"
+    ],
+    "cleancss": true,
+    "compress": true,
+    "yuicompress": true,
+    "optimization": 2
+  }
+}
