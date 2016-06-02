@@ -5,6 +5,7 @@
 				{Yii::t('vps-uploader', 'GUID')}
 				<p class="help">{Yii::t('vps-uploader', 'Unique identifier.')}</p>
 			</th>
+			<th>{Yii::t('vps-uploader', 'Link')}</th>
 			<th>{Yii::t('vps-uploader', 'Extension')}</th>
 			<th>{Yii::t('vps-uploader', 'Original name')}</th>
 			<th>{Yii::t('vps-uploader', 'Filesize')}</th>
@@ -20,6 +21,7 @@
 		{foreach $files as $file}
 			<tr>
 				<td>{$file->guid}</td>
+				<td>{Html::a($file->path, $file->getUrl(), [ 'class' => 'vu-file-link' ])}</td>
 				<td>{$file->extension}</td>
 				<td>{$file->name}</td>
 				<td>{HumanHelper::size($file->size)}</td>

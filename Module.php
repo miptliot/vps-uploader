@@ -9,12 +9,6 @@
 	class Module extends \yii\base\Module implements BootstrapInterface
 	{
 		/**
-		 * @var string
-		 * Base path to store files. Must be writable.
-		 */
-		public $basepath;
-
-		/**
 		 * @var int
 		 * File chunk size in bytes to upload large files. Default is 1048576 (1M). This value must be less than
 		 * $maxsize.
@@ -32,6 +26,18 @@
 		 * Maximum file size to upload. Default is _null_ (unlimited). Format is like 128M.
 		 */
 		public $maxsize = null;
+
+		/**
+		 * @var string
+		 * Base path to store files. Must be writable.
+		 */
+		public $path;
+
+		/**
+		 * @var string
+		 * Relative URL to build link for file. The full URL look like http(s)://<host><baseurl>/<relativepath>
+		 */
+		public $url = '/uploader/files';
 
 		/**
 		 * @inheritdoc
@@ -73,12 +79,12 @@
 
 		private function checkParameters ()
 		{
-			// Check basepath.
-			if (!is_dir($this->basepath))
-				throw new InvalidConfigException($this->basepath . ' is not a directory.');
+			// Check path.
+			if (!is_dir($this->path))
+				throw new InvalidConfigException($this->path . ' is not a directory.');
 
-			if (!is_writable($this->basepath))
-				throw new InvalidConfigException($this->basepath . ' is not writable.');
+			if (!is_writable($this->path))
+				throw new InvalidConfigException($this->path . ' is not writable.');
 
 			// Check chunksize.
 			$bytes = HumanHelper::maxBytesUpload();
