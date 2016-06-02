@@ -16,6 +16,20 @@
 			$this->data('chunksize', $this->module->chunksize);
 		}
 
+		/**
+		 * Generate unique GUID.
+		 * @return string
+		 */
+		public function actionGuid ()
+		{
+			$guid = StringHelper::random();
+
+			while (File::find()->where([ 'guid' => $guid ])->count() > 0)
+				$guid = StringHelper::random();
+
+			return $guid;
+		}
+
 		public function actionIndex ()
 		{
 			$this->title = Yii::t('vps-uploader', 'File list');
@@ -67,39 +81,57 @@
 			$flow->tmpDir = $datapath . '/tmp';
 			$flow->targetDir = $datapath . '/files';
 
-			$flow->process();
-
-			if ($flow->isComplete)
+			if ($flow->isUploading)
 			{
-				$filename = $flow->getParam('filename');
+				$guid = $flow->getParam('identifier');
 
-				$file = new File;
-				$file->guid = StringHelper::random();
-				$file->name = pathinfo($filename, PATHINFO_FILENAME);
-				$file->extension = pathinfo($filename, PATHINFO_EXTENSION);
-				$file->save();
-
-				$targetDir = $datapath . '/files/' . $file->guid[ 0 ] . '/' . $file->guid[ 1 ];
-
-				$flow->targetDir = $targetDir;
-				$flow->save($file->guid);
-
-				if (file_exists($targetDir . '/' . $flow->savedFilename))
+				if ($flow->isNew)
 				{
-					$file->status = File::S_OK;
-					$file->path = $file->guid[ 0 ] . '/' . $file->guid[ 1 ] . '/' . $flow->savedFilename;
-					$file->size = (string)filesize($targetDir . '/' . $flow->savedFilename);
+					$filename = $flow->getParam('filename');
+
+					$file = new File;
+					$file->guid = $guid;
+					$file->name = pathinfo($filename, PATHINFO_FILENAME);
+					$file->extension = pathinfo($filename, PATHINFO_EXTENSION);
 					$file->save();
 				}
 				else
 				{
-					$file->status = File::S_ERROR;
-					$file->message = Yii::t('vps-uploader', 'Error saving file to path {path}.', [ 'path' => $file->guid[ 0 ] . '/' . $file->guid[ 1 ] . '/' . $flow->savedFilename ]);
-					$file->save();
+					$file = File::findOne([ 'guid' => $guid ]);
 				}
 
-				echo $file->guid;
+				$flow->uploadChunk();
+
+				if ($flow->isComplete)
+				{
+					$targetDir = $datapath . '/files/' . $file->guid[ 0 ] . '/' . $file->guid[ 1 ];
+
+					$flow->targetDir = $targetDir;
+					$flow->save($file->guid);
+
+					if (file_exists($targetDir . '/' . $flow->savedFilename))
+					{
+						$file->status = File::S_OK;
+						$file->path = $file->guid[ 0 ] . '/' . $file->guid[ 1 ] . '/' . $flow->savedFilename;
+						$file->size = (string)filesize($targetDir . '/' . $flow->savedFilename);
+						$file->save();
+					}
+					else
+					{
+						$file->status = File::S_ERROR;
+						$file->message = Yii::t('vps-uploader', 'Error saving file to path {path}.', [ 'path' => $file->guid[ 0 ] . '/' . $file->guid[ 1 ] . '/' . $flow->savedFilename ]);
+						$file->save();
+					}
+				}
+				elseif ($file->status != File::S_UPLOADING)
+				{
+					$file->status = File::S_UPLOADING;
+					$file->save();
+				}
+				// @TODO: output errors
 			}
+			else
+				$flow->testChunk();
 
 			Yii::$app->end();
 		}

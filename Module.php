@@ -53,6 +53,7 @@
 					'<_m:uploader>/file/index/?'                  => '<_m>/file/index',
 					'<_m:uploader>/file/upload/?'                 => '<_m>/file/upload',
 					'<_m:uploader>/file/add/?'                    => '<_m>/file/add',
+					'<_m:uploader>/file/guid/?'                   => '<_m>/file/guid',
 					'<_m:uploader>/file/<page:[0-9]+>/?'          => '<_m>/file/index',
 					'<_m:uploader>/file/<guid:[a-zA-Z0-9]{5,}>/?' => '<_m>/file/view',
 				]

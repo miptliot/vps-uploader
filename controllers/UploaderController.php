@@ -10,6 +10,6 @@
 		{
 			$this->title = Yii::t('vps-uploader', 'VPS uploader');
 
-			$this->data('last', File::find()->orderBy([ 'dt' => SORT_DESC ])->all());
+			$this->data('last', File::find()->orderBy([ 'dt' => SORT_DESC ])->limit(20)->all());
 		}
 	}

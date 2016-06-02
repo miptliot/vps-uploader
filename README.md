@@ -29,5 +29,3 @@ This is file uploader developed specially for CIET MIPT projects. You can use it
 
 # Requirements
 You should include [Flow.js](https://github.com/flowjs/flow.js) library and CSS and JS file from [Jasny Bootstrap](https://github.com/jasny/bootstrap/).
-
-If you want to see clipboard button to copy file links to clipboard you shoul include [clipboard.js](https://github.com/zenorocha/clipboard.js/).
