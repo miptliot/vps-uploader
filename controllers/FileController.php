@@ -11,11 +11,15 @@
 	{
 		public function actionAdd ()
 		{
+			$this->title = Yii::t('vps-uploader', 'Add files');
+
 			$this->data('chunksize', $this->module->chunksize);
 		}
 
 		public function actionIndex ()
 		{
+			$this->title = Yii::t('vps-uploader', 'File list');
+
 			$query = File::find();
 
 			$provider = new ActiveDataProvider([
@@ -90,7 +94,7 @@
 				else
 				{
 					$file->status = File::S_ERROR;
-					$file->message = Yii::t('vps-uploader', 'Error saving file to path {path}', [ 'path' => $file->guid[ 0 ] . '/' . $file->guid[ 1 ] . '/' . $flow->savedFilename ]);
+					$file->message = Yii::t('vps-uploader', 'Error saving file to path {path}.', [ 'path' => $file->guid[ 0 ] . '/' . $file->guid[ 1 ] . '/' . $flow->savedFilename ]);
 					$file->save();
 				}
 
