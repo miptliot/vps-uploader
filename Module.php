@@ -89,11 +89,11 @@
 
 			$app->getUrlManager()->addRules(
 				[
-					'<_m:uploader>/?'                                     => '<_m>/uploader/index',
-					'<_m:uploader>/file/?'                                => '<_m>/file/index',
-					'<_m:uploader>/file/<action:(index|upload|add|guid)>' => '<_m>/file/<action>',
-					'<_m:uploader>/file/<page:[0-9]+>/?'                  => '<_m>/file/index',
-					'<_m:uploader>/file/<guid:[a-zA-Z0-9]{5,}>/?'         => '<_m>/file/view',
+					'<_m:uploader>/?'                                           => '<_m>/uploader/index',
+					'<_m:uploader>/file/?'                                      => '<_m>/file/index',
+					'<_m:uploader>/file/<action:(index|upload|add|batch|guid)>' => '<_m>/file/<action>',
+					'<_m:uploader>/file/<page:[0-9]+>/?'                        => '<_m>/file/index',
+					'<_m:uploader>/file/<guid:[a-zA-Z0-9]{5,}>/?'               => '<_m>/file/view',
 				]
 			);
 

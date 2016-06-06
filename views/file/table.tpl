@@ -21,7 +21,7 @@
 	<tbody>
 		{foreach $files as $file}
 			<tr>
-				<td><input type="checkbox" name="file[]" class="vu-file-check"></td>
+				<td><input type="checkbox" name="file[]" value="{$file->guid}" class="vu-file-check"></td>
 				<td>{$file->guid}</td>
 				<td>{Html::a($file->path, $file->getUrl(), [ 'class' => 'vu-file-link' ])}</td>
 				<td>{$file->extension}</td>
@@ -49,6 +49,14 @@
 	<button type="button" class="btn btn-primary vu-file-batch-go" disabled>{Yii::t('vps-uploader', 'Go')}</button>
 </div>
 <script>
+	function checkedGuids () {
+		var guids = [];
+		$('.vu-file-check:checked').each(function () {
+			guids.push($(this).val());
+		});
+		console.log(guids);
+		return guids;
+	}
 	$(document).ready(function () {
 		$('.vu-file-check-all').click(function () {
 			$('.vu-file-check').prop('checked', true);
@@ -64,6 +72,9 @@
 			else {
 				btn.prop('disabled', false);
 			}
+		});
+		$('.vu-file-batch-go').click(function () {
+			window.location = '{yii\helpers\Url::to([ "file/batch" ])}?path=' + $('.vu-file-batch-select').val() + '&guids=' + checkedGuids().join(',');
 		});
 	});
 </script>

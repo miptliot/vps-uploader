@@ -16,6 +16,10 @@
 			$this->data('chunksize', $this->module->chunksize);
 		}
 
+		public function actionBatch ()
+		{
+		}
+
 		/**
 		 * Generate unique GUID.
 		 * @return string
