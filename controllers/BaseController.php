@@ -11,7 +11,8 @@
 			if (parent::beforeAction($action))
 			{
 				$this->setViewPath('@vps-uploader/views');
-				$this->_tpl = $this->viewPath . '/' . $this->id . '/' . $this->action->id;
+				$this->_tpl = $this->viewPath . '/index';
+				$this->data('pageTpl', $this->viewPath . '/' . $this->id . '/' . $this->action->id . '.tpl');
 
 				return true;
 			}
