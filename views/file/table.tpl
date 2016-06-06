@@ -76,5 +76,9 @@
 		$('.vu-file-batch-go').click(function () {
 			window.location = '{yii\helpers\Url::to([ "file/batch" ])}?path=' + $('.vu-file-batch-select').val() + '&guids=' + checkedGuids().join(',');
 		});
+		$('.vu-table tr').click(function () {
+			var ch = $(this).find('input.vu-file-check');
+			ch.prop('checked', !ch.prop('checked'));
+		});
 	});
 </script>
