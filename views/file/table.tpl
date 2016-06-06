@@ -1,6 +1,7 @@
 <table class="table table-striped table-bordered table-hover vu-table">
 	<thead>
 		<tr>
+			<th></th>
 			<th>
 				{Yii::t('vps-uploader', 'GUID')}
 				<p class="help">{Yii::t('vps-uploader', 'Unique identifier.')}</p>
@@ -20,6 +21,7 @@
 	<tbody>
 		{foreach $files as $file}
 			<tr>
+				<td><input type="checkbox" name="file[]" class="vu-file-check"></td>
 				<td>{$file->guid}</td>
 				<td>{Html::a($file->path, $file->getUrl(), [ 'class' => 'vu-file-link' ])}</td>
 				<td>{$file->extension}</td>
@@ -32,3 +34,17 @@
 		{/foreach}
 	</tbody>
 </table>
+<div class="btn-group" role="group">
+	<button class="btn btn-default vu-file-check-all" type="button">{Yii::t('vps-uploader', 'Check all')}</button>
+	<button class="btn btn-default vu-file-uncheck-all" type="button">{Yii::t('vps-uploader', 'Uncheck all')}</button>
+</div>
+<script>
+	$(document).ready(function () {
+		$('.vu-file-check-all').click(function () {
+			$('.vu-file-check').prop('checked', true);
+		});
+		$('.vu-file-uncheck-all').click(function () {
+			$('.vu-file-check').prop('checked', false);
+		});
+	});
+</script>
