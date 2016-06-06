@@ -2,10 +2,19 @@
 	namespace vps\uploader;
 
 	use vps\tools\helpers\HumanHelper;
+	use vps\uploader\controllers\FileController;
 	use Yii;
 	use yii\base\BootstrapInterface;
 	use yii\base\InvalidConfigException;
 
+	/**
+	 * @property array         $batchActions
+	 * @property int           $chunksize
+	 * @property null|string[] $extensions
+	 * @property null|string   $maxsize
+	 * @property string        $path
+	 * @property string        $url
+	 */
 	class Module extends \yii\base\Module implements BootstrapInterface
 	{
 		/**
@@ -38,6 +47,38 @@
 		 * Relative URL to build link for file. The full URL look like http(s)://<host><baseurl>/<relativepath>
 		 */
 		public $url = '/uploader/files';
+
+		/**
+		 * List of actions to batch process files.
+		 * @var array Array of associative arrays, which one should consist of title for the select box item, path
+		 *      to the desired action (classname and action name), and unique path to use as value for the elect box.
+		 *      To this action parameter guids wil be passed, which is comma-separated list of file GUIDs.
+		 */
+		private $_batchActions = [
+			[
+				'title'  => 'Copy GUIDs from file names',
+				'action' => [ FileController::class, 'guidFromName' ],
+				'path'   => 'file/copyGUIDs'
+			]
+		];
+
+		/**
+		 * @property-read $batchActions
+		 * @return array
+		 */
+		public function getBatchActions ()
+		{
+			return $this->_batchActions;
+		}
+
+		/**
+		 * @property-write $batchActions
+		 * @param  array   $actions
+		 */
+		public function setBatchAction ($actions)
+		{
+			$this->_batchActions = array_merge($this->_batchActions, $actions);
+		}
 
 		/**
 		 * @inheritdoc

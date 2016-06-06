@@ -1,6 +1,7 @@
 <?php
 	return [
 		'Add files'          => 'Добавить файлы',
+		'Check all'          => 'Выбрать все',
 		'Clear list'         => 'Очистить список',
 		'Extension'          => 'Расширение',
 		'File list'          => 'Список файлов',
@@ -17,10 +18,12 @@
 		'Select files'       => 'Выбрать файлы',
 		'Status'             => 'Статус',
 		'Total'              => 'Всего',
+		'Uncheck all'        => 'Развыбрать все',
 		'Unique identifier.' => 'Уникальный идентификатор.',
 		'Upload'             => 'Загрузить',
 		'VPS uploader'       => 'Загрузчик файлов. Крутой',
 
+		'Copy GUIDs from file names'        => 'Скопировать ГУИДы из имён файлов',
 		'Error saving file to path {path}.' => 'Ошибка при сохранение файла в {path}.',
 
 		'You should include <a href="https://github.com/flowjs/flow.js">Flow.js</a> library to make this uploader work.' => 'Вы должны подключить библиотеку <a href="https://github.com/flowjs/flow.js">Flow.js</a>, чтобы вся эта дура заработала.',

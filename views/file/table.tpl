@@ -38,6 +38,16 @@
 	<button class="btn btn-default vu-file-check-all" type="button">{Yii::t('vps-uploader', 'Check all')}</button>
 	<button class="btn btn-default vu-file-uncheck-all" type="button">{Yii::t('vps-uploader', 'Uncheck all')}</button>
 </div>
+<div class="vu-file-batch form-inline">
+	{Yii::t('vps-uploader', 'With selected:')}
+	<select class="form-control vu-file-batch-select">
+		<option></option>
+		{foreach Yii::$app->controller->module->batchActions as $action}
+			<option value="{$action.path}">{Yii::t('vps-uploader', $action.title)}</option>
+		{/foreach}
+	</select>
+	<button type="button" class="btn btn-primary vu-file-batch-go" disabled>{Yii::t('vps-uploader', 'Go')}</button>
+</div>
 <script>
 	$(document).ready(function () {
 		$('.vu-file-check-all').click(function () {
@@ -45,6 +55,15 @@
 		});
 		$('.vu-file-uncheck-all').click(function () {
 			$('.vu-file-check').prop('checked', false);
+		});
+		$('.vu-file-batch-select, .vu-file-check').change(function () {
+			var btn = $('.vu-file-batch-go');
+			if ($('.vu-file-batch-select').val() == '' || $('.vu-file-check:checked').length == 0) {
+				btn.prop('disabled', true);
+			}
+			else {
+				btn.prop('disabled', false);
+			}
 		});
 	});
 </script>
