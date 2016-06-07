@@ -6,6 +6,7 @@
 	use vps\tools\net\Flow;
 	use vps\uploader\models\File;
 	use yii\data\ActiveDataProvider;
+	use yii\base\InvalidConfigException;
 
 	class FileController extends BaseController
 	{
@@ -18,6 +19,17 @@
 
 		public function actionBatch ()
 		{
+			$path = Yii::$app->request->get('path');
+			$action = $this->module->findBatchAction($path);
+
+			if ($action == null)
+				throw new InvalidConfigException('Cannot find action with path ' . $path);
+
+			list( $class, $method ) = $action[ 'method' ];
+			if (!method_exists($class, $method))
+				throw new InvalidConfigException('Cannot find method: ' . implode('::', $action[ 'method' ]));
+
+			call_user_func_array($action[ 'method' ], StringHelper::explode(Yii::$app->request->get('guids'), ','));
 		}
 
 		/**

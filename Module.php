@@ -2,7 +2,7 @@
 	namespace vps\uploader;
 
 	use vps\tools\helpers\HumanHelper;
-	use vps\uploader\controllers\FileController;
+	use vps\uploader\data\Batch;
 	use Yii;
 	use yii\base\BootstrapInterface;
 	use yii\base\InvalidConfigException;
@@ -51,13 +51,13 @@
 		/**
 		 * List of actions to batch process files.
 		 * @var array Array of associative arrays, which one should consist of title for the select box item, path
-		 *      to the desired action (classname and action name), and unique path to use as value for the elect box.
-		 *      To this action parameter guids wil be passed, which is comma-separated list of file GUIDs.
+		 *      to the desired action (classname and method name), and unique path to use as value for the select box.
+		 *      To this method parameter guids wil be passed, which is array of file GUIDs.
 		 */
 		private $_batchActions = [
 			[
 				'title'  => 'Copy GUIDs from file names',
-				'action' => [ FileController::class, 'guidFromName' ],
+				'method' => [ Batch::class, 'guidFromName' ],
 				'path'   => 'file/copyGUIDs'
 			]
 		];
@@ -108,6 +108,20 @@
 					]
 				];
 			}
+		}
+
+		/**
+		 * Finds batch action by its path.
+		 * @param string $path
+		 * @return null|array
+		 */
+		public function findBatchAction ($path)
+		{
+			foreach ($this->_batchActions as $action)
+				if ($action[ 'path' ] == $path)
+					return $action;
+
+			return null;
 		}
 
 		public function init ()
