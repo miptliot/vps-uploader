@@ -57,6 +57,15 @@
 		console.log(guids);
 		return guids;
 	}
+	function toggleBtn () {
+		var btn = $('.vu-file-batch-go');
+		if ($('.vu-file-batch-select').val() == '' || $('.vu-file-check:checked').length == 0) {
+			btn.prop('disabled', true);
+		}
+		else {
+			btn.prop('disabled', false);
+		}
+	}
 	$(document).ready(function () {
 		$('.vu-file-check-all').click(function () {
 			$('.vu-file-check').prop('checked', true);
@@ -65,20 +74,20 @@
 			$('.vu-file-check').prop('checked', false);
 		});
 		$('.vu-file-batch-select, .vu-file-check').change(function () {
-			var btn = $('.vu-file-batch-go');
-			if ($('.vu-file-batch-select').val() == '' || $('.vu-file-check:checked').length == 0) {
-				btn.prop('disabled', true);
-			}
-			else {
-				btn.prop('disabled', false);
-			}
+			toggleBtn();
 		});
 		$('.vu-file-batch-go').click(function () {
 			window.location = '{yii\helpers\Url::to([ "file/batch" ])}?path=' + $('.vu-file-batch-select').val() + '&guids=' + checkedGuids().join(',');
 		});
-		$('.vu-table tr').click(function () {
-			var ch = $(this).find('input.vu-file-check');
-			ch.prop('checked', !ch.prop('checked'));
+		$('.vu-table tr').click(function (e) {
+			if ($(e.target).is('.vu-file-check')) {
+				return true;
+			}
+			else {
+				var ch = $(this).find('input.vu-file-check');
+				ch.prop('checked', !ch.prop('checked'));
+				toggleBtn();
+			}
 		});
 	});
 </script>
