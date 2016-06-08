@@ -5,17 +5,18 @@
 	use Yii;
 
 	/**
-	 * @property string $dt
-	 * @property string $extension
-	 * @property string $guid
-	 * @property string $message
-	 * @property string $name
-	 * @property string $path
-	 * @property string $size
-	 * @property string $status
-	 * @property int    $userID
+	 * @property string      $dt
+	 * @property string      $extension
+	 * @property string      $guid
+	 * @property string      $message
+	 * @property string      $name
+	 * @property string      $path
+	 * @property string      $size
+	 * @property string      $status
+	 * @property int         $userID
 	 *
 	 * @property-read [[Log]][] $logs
+	 * @property-read string $url
 	 */
 	class File extends \yii\db\ActiveRecord
 	{

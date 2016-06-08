@@ -2,7 +2,7 @@
 	namespace vps\uploader;
 
 	use vps\tools\helpers\HumanHelper;
-	use vps\uploader\data\Batch;
+	use vps\uploader\batch\Batch;
 	use Yii;
 	use yii\base\BootstrapInterface;
 	use yii\base\InvalidConfigException;

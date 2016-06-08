@@ -1,7 +1,9 @@
 <?php
 	namespace vps\uploader\controllers;
 
+	use vps\tools\helpers\Html;
 	use vps\tools\helpers\StringHelper;
+	use vps\uploader\batch\BatchResult;
 	use Yii;
 	use vps\tools\net\Flow;
 	use vps\uploader\models\File;
@@ -29,7 +31,26 @@
 			if (!method_exists($class, $method))
 				throw new InvalidConfigException('Cannot find method: ' . implode('::', $action[ 'method' ]));
 
-			call_user_func_array($action[ 'method' ], StringHelper::explode(Yii::$app->request->get('guids'), ','));
+			$result = call_user_func($action[ 'method' ], StringHelper::explode(Yii::$app->request->get('guids'), ','));
+
+			if ($result instanceof BatchResult)
+			{
+				if (count($result->oks) > 0)
+				{
+					$ok = Yii::t('vps-uploader', 'Following files were processed.');
+					$ok .= Html::ul($result->getListItems('ok'), [ 'encode' => false ]);
+					Yii::$app->notification->messageToSession($ok);
+				}
+
+				if (count($result->errors) > 0)
+				{
+					$error = Yii::t('vps-uploader', 'Following files were NOT processed.');
+					$error .= Html::ul($result->getListItems('error'), [ 'encode' => false ]);
+					Yii::$app->notification->errorToSession($error);
+				}
+			}
+
+			$this->redirect(Yii::$app->request->referrer);
 		}
 
 		/**

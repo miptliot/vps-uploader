@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered table-hover vu-table">
+<table class="table table-striped table-bordered table-hover vu-file-table">
 	<thead>
 		<tr>
 			<th></th>
@@ -22,14 +22,14 @@
 		{foreach $files as $file}
 			<tr>
 				<td><input type="checkbox" name="file[]" value="{$file->guid}" class="vu-file-check"></td>
-				<td>{Html::a($file->guid, ["file/`$file->guid`"], [ 'class' => 'vu-file-link', 'title' => Yii::t('vps-uploader', 'File view') ])}</td>
-				<td>{Html::a($file->path, $file->getUrl(), [ 'class' => 'vu-file-link' ])}</td>
-				<td>{$file->extension}</td>
-				<td>{$file->name}</td>
-				<td>{HumanHelper::size($file->size)}</td>
+				<td class="vu-file-cell-guid">{Html::a($file->guid, ["file/`$file->guid`"], [ 'class' => 'vu-file-link', 'title' => Yii::t('vps-uploader', 'File view') ])}</td>
+				<td class="vu-file-cell-link">{Html::a($file->path, $file->getUrl(), [ 'class' => 'vu-file-link' ])}</td>
+				<td class="vu-file-cell-ext">{$file->extension}</td>
+				<td class="vu-file-cell-name">{$file->name}</td>
+				<td class="vu-file-cell-size">{HumanHelper::size($file->size)}</td>
 				<td class="vu-file-status-{$file->status}">{$file->status}</td>
-				<td>{$file->message}</td>
-				<td>{Yii::$app->formatter->asDatetime($file->dt)}</td>
+				<td class="vu-file-cell-message">{$file->message}</td>
+				<td class="vu-file-cell-dt">{Yii::$app->formatter->asDatetime($file->dt)}</td>
 			</tr>
 		{/foreach}
 	</tbody>
