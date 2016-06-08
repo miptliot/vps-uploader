@@ -1,5 +1,5 @@
 <?php
-	namespace vps\uploader\data;
+	namespace vps\uploader\batch;
 
 	use vps\uploader\models\File;
 	use Yii;

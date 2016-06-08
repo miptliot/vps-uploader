@@ -85,8 +85,13 @@
 			$this->data('pagination', $provider->pagination);
 		}
 
-		public function actionView ()
+		public function actionView ($guid)
 		{
+			$this->title = Yii::t('vps-uploader', 'File view');
+
+			$file = File::findOne([ 'guid' => $guid ]);
+			if ($file !== null)
+				$this->data('file', $file);
 		}
 
 		public function actionUpload ()

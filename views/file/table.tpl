@@ -22,7 +22,7 @@
 		{foreach $files as $file}
 			<tr>
 				<td><input type="checkbox" name="file[]" value="{$file->guid}" class="vu-file-check"></td>
-				<td>{$file->guid}</td>
+				<td>{Html::a($file->guid, ["file/`$file->guid`"], [ 'class' => 'vu-file-link', 'title' => Yii::t('vps-uploader', 'File view') ])}</td>
 				<td>{Html::a($file->path, $file->getUrl(), [ 'class' => 'vu-file-link' ])}</td>
 				<td>{$file->extension}</td>
 				<td>{$file->name}</td>

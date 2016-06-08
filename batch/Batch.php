@@ -1,5 +1,5 @@
 <?php
-	namespace vps\uploader\data;
+	namespace vps\uploader\batch;
 
 	class Batch
 	{

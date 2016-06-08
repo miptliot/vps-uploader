@@ -5,6 +5,7 @@
 		'Clear list'         => 'Очистить список',
 		'Extension'          => 'Расширение',
 		'File list'          => 'Список файлов',
+		'File view'          => 'Просмотр файла',
 		'Filesize'           => 'Размер файла',
 		'GUID'               => 'GUID',
 		'In case of error.'  => 'В случае ошибки.',
@@ -25,6 +26,7 @@
 
 		'Copy GUIDs from file names'        => 'Скопировать ГУИДы из имён файлов',
 		'Error saving file to path {path}.' => 'Ошибка при сохранение файла в {path}.',
+		'File not found.'                   => 'Файл не найден.',
 
 		'You should include <a href="https://github.com/flowjs/flow.js">Flow.js</a> library to make this uploader work.' => 'Вы должны подключить библиотеку <a href="https://github.com/flowjs/flow.js">Flow.js</a>, чтобы вся эта дура заработала.',
 	];
