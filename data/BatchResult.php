@@ -1,17 +1,45 @@
 <?php
 	namespace vps\uploader\data;
 
+	use vps\uploader\models\File;
+	use Yii;
 	use yii\base\Object;
 
 	class BatchResult extends Object
 	{
-		const T_FILE = 'file';
-		const T_LOG  = 'log';
+		/**
+		 * @var string[] List of error GUIDs.
+		 */
+		private $_errors = [ ];
 
-		private $_errorList = [ ];
-		private $_okList    = [ ];
+		/**
+		 * @var string[] List of OK GUIDs.
+		 */
+		private $_oks = [ ];
 
-		public function error ($guid, $type = self::T_FILE)
+		/**
+		 * @var [[vps\uploader\Module]] Just internal variable to store module.
+		 */
+		private $_module;
+
+		public function getErrors ()
 		{
+		}
+
+		public function init ()
+		{
+			parent::init();
+
+			$this->_module = Yii::$app->controller->module;
+		}
+
+		public function error ($guid)
+		{
+			$this->_errors[] = $guid;
+		}
+
+		public function ok ($guid)
+		{
+			$this->_oks[] = $guid;
 		}
 	}
