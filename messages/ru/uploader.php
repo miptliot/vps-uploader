@@ -24,11 +24,12 @@
 		'Upload'             => 'Загрузить',
 		'VPS uploader'       => 'Загрузчик файлов. Крутой',
 
-		'Copy GUIDs from file names'          => 'Скопировать ГУИДы из имён файлов',
-		'Error saving file to path {path}.'   => 'Ошибка при сохранение файла в {path}.',
-		'File not found.'                     => 'Файл не найден.',
-		'Following files were processed.'     => 'Следующие файлы были обработаны.',
-		'Following files were NOT processed.' => 'Следующие файлы не были обработаны.',
+		'Copy GUIDs from file names'                                       => 'Скопировать ГУИДы из имён файлов',
+		'Error saving file to path {path}.'                                => 'Ошибка при сохранение файла в {path}.',
+		'File not found.'                                                  => 'Файл не найден.',
+		'Following files were processed.'                                  => 'Следующие файлы были обработаны.',
+		'Following files were NOT processed.'                              => 'Следующие файлы не были обработаны.',
+		'GUID should contain only latin letters, numbers and symbols: ._-' => 'GUID должен содержать только буквы латинского алфавита, цифры и символы: ._-',
 
 		'You should include <a href="https://github.com/flowjs/flow.js">Flow.js</a> library to make this uploader work.' => 'Вы должны подключить библиотеку <a href="https://github.com/flowjs/flow.js">Flow.js</a>, чтобы вся эта дура заработала.',
 	];

@@ -90,6 +90,7 @@
 				[ [ 'guid' ], 'unique' ],
 				[ [ 'guid' ], 'required' ],
 				[ [ 'guid' ], 'string', 'length' => [ 1, 100 ] ],
+				[ [ 'guid' ], 'match', 'pattern' => '/^[\w\d\-\.]+$/', 'message' => Yii::t('vps-uploader', 'GUID should contain only latin letters, numbers and symbols: ._-') ],
 				[ [ 'message' ], 'string' ],
 				[ [ 'name', 'path' ], 'string', 'max' => 100 ],
 				[ [ 'status' ], 'default', 'value' => self::S_NEW ],
