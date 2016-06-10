@@ -21,7 +21,10 @@
 				$guid = $file->guid;
 				$file->guid = $file->name;
 				if ($file->save())
+				{
+					$file->rename($file->guid);
 					$result->ok($file->guid);
+				}
 				else
 					$result->error($guid);
 			}

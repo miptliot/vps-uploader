@@ -78,6 +78,26 @@
 		}
 
 		/**
+		 * Renames file to new name.
+		 * @param string $newname New file name without extension.
+		 * @return bool
+		 */
+		public function rename ($newname)
+		{
+			$path = Yii::$app->controller->module->filepath . '/' . $this->path;
+			$dir = pathinfo($path, PATHINFO_DIRNAME);
+
+			if (rename($path, $dir . '/' . $newname . '.' . $this->extension))
+			{
+				$this->path = pathinfo($this->path, PATHINFO_DIRNAME) . '/' . $newname . '.' . $this->extension;
+
+				return $this->save();
+			}
+
+			return false;
+		}
+
+		/**
 		 * @inheritdoc
 		 */
 		public function rules ()

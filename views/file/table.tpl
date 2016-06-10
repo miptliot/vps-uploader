@@ -69,9 +69,11 @@
 	$(document).ready(function () {
 		$('.vu-file-check-all').click(function () {
 			$('.vu-file-check').prop('checked', true);
+			toggleBtn();
 		});
 		$('.vu-file-uncheck-all').click(function () {
 			$('.vu-file-check').prop('checked', false);
+			toggleBtn();
 		});
 		$('.vu-file-batch-select, .vu-file-check').change(function () {
 			toggleBtn();

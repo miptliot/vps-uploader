@@ -14,6 +14,9 @@
 	 * @property null|string   $maxsize
 	 * @property string        $path
 	 * @property string        $url
+	 *
+	 * @property-read string   $filepath
+	 * @property-read string   $tmppath
 	 */
 	class Module extends \yii\base\Module implements BootstrapInterface
 	{
@@ -69,6 +72,24 @@
 		public function getBatchActions ()
 		{
 			return $this->_batchActions;
+		}
+
+		/**
+		 * Return path to files directory.
+		 * @return string
+		 */
+		public function getFilepath ()
+		{
+			return $this->path . '/files';
+		}
+
+		/**
+		 * Return path to tmp directory.
+		 * @return string
+		 */
+		public function getTmppath ()
+		{
+			return $this->path . '/tmp';
 		}
 
 		/**
