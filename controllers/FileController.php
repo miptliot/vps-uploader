@@ -3,7 +3,7 @@
 
 	use vps\tools\helpers\Html;
 	use vps\tools\helpers\StringHelper;
-	use vps\uploader\batch\BatchResult;
+	use vps\uploader\batch\BatchResultBase;
 	use Yii;
 	use vps\tools\net\Flow;
 	use vps\uploader\models\File;
@@ -33,7 +33,7 @@
 
 			$result = call_user_func($action[ 'method' ], StringHelper::explode(Yii::$app->request->get('guids'), ','));
 
-			if ($result instanceof BatchResult)
+			if ($result instanceof BatchResultBase)
 			{
 				if (count($result->oks) > 0)
 				{
@@ -117,11 +117,9 @@
 
 		public function actionUpload ()
 		{
-			$datapath = $this->module->path;
-
 			$flow = new Flow;
-			$flow->tmpDir = $datapath . '/tmp';
-			$flow->targetDir = $datapath . '/files';
+			$flow->tmpDir = $this->module->tmppath;
+			$flow->targetDir = $this->module->filepath;
 
 			if ($flow->isUploading)
 			{
@@ -146,7 +144,7 @@
 
 				if ($flow->isComplete)
 				{
-					$targetDir = $datapath . '/files/' . $file->guid[ 0 ] . '/' . $file->guid[ 1 ];
+					$targetDir = $this->module->filepath . '/' . $file->guid[ 0 ] . '/' . $file->guid[ 1 ];
 
 					$flow->targetDir = $targetDir;
 					$flow->save($file->guid);
