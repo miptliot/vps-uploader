@@ -1,11 +1,14 @@
 <?php
 	namespace vps\uploader\controllers;
 
+	use vps\tools\helpers\Html;
 	use vps\tools\helpers\StringHelper;
+	use vps\uploader\batch\BatchResultBase;
 	use Yii;
 	use vps\tools\net\Flow;
 	use vps\uploader\models\File;
 	use yii\data\ActiveDataProvider;
+	use yii\base\InvalidConfigException;
 
 	class FileController extends BaseController
 	{
@@ -14,6 +17,40 @@
 			$this->title = Yii::t('vps-uploader', 'Add files');
 
 			$this->data('chunksize', $this->module->chunksize);
+		}
+
+		public function actionBatch ()
+		{
+			$path = Yii::$app->request->get('path');
+			$action = $this->module->findBatchAction($path);
+
+			if ($action == null)
+				throw new InvalidConfigException('Cannot find action with path ' . $path);
+
+			list( $class, $method ) = $action[ 'method' ];
+			if (!method_exists($class, $method))
+				throw new InvalidConfigException('Cannot find method: ' . implode('::', $action[ 'method' ]));
+
+			$result = call_user_func($action[ 'method' ], StringHelper::explode(Yii::$app->request->get('guids'), ','));
+
+			if ($result instanceof BatchResultBase)
+			{
+				if (count($result->oks) > 0)
+				{
+					$ok = Yii::t('vps-uploader', 'Following files were processed.');
+					$ok .= Html::ul($result->getListItems('ok'), [ 'encode' => false ]);
+					Yii::$app->notification->messageToSession($ok);
+				}
+
+				if (count($result->errors) > 0)
+				{
+					$error = Yii::t('vps-uploader', 'Following files were NOT processed.');
+					$error .= Html::ul($result->getListItems('error'), [ 'encode' => false ]);
+					Yii::$app->notification->errorToSession($error);
+				}
+			}
+
+			$this->redirect(Yii::$app->request->referrer);
 		}
 
 		/**
@@ -69,17 +106,20 @@
 			$this->data('pagination', $provider->pagination);
 		}
 
-		public function actionView ()
+		public function actionView ($guid)
 		{
+			$this->title = Yii::t('vps-uploader', 'File view');
+
+			$file = File::findOne([ 'guid' => $guid ]);
+			if ($file !== null)
+				$this->data('file', $file);
 		}
 
 		public function actionUpload ()
 		{
-			$datapath = $this->module->path;
-
 			$flow = new Flow;
-			$flow->tmpDir = $datapath . '/tmp';
-			$flow->targetDir = $datapath . '/files';
+			$flow->tmpDir = $this->module->tmppath;
+			$flow->targetDir = $this->module->filepath;
 
 			if ($flow->isUploading)
 			{
@@ -104,7 +144,7 @@
 
 				if ($flow->isComplete)
 				{
-					$targetDir = $datapath . '/files/' . $file->guid[ 0 ] . '/' . $file->guid[ 1 ];
+					$targetDir = $this->module->filepath . '/' . $file->guid[ 0 ] . '/' . $file->guid[ 1 ];
 
 					$flow->targetDir = $targetDir;
 					$flow->save($file->guid);

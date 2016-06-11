@@ -13,7 +13,7 @@
 			}
 
 			$this->createTable('vu_file', [
-				'guid'      => $this->string(25)->notNull(),
+				'guid'      => $this->string(100)->notNull(),
 				'path'      => $this->string(100),
 				'extension' => $this->string(10),
 				'size'      => $this->string(20),

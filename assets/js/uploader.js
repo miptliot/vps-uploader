@@ -2,7 +2,7 @@
 	'use strict';
 
 	var Uploader = function (element, options) {
-		var Progress = function (element, options) {
+		var Progress              = function (element, options) {
 			this.text = $('<span/>');
 
 			this.bar = $('<div/>')
@@ -18,7 +18,7 @@
 
 			return this;
 		};
-		Progress.prototype.set = function (value) {
+		Progress.prototype.set    = function (value) {
 			if (value < 0)
 				value = 0;
 			if (value > 100)
@@ -33,11 +33,11 @@
 			this.text.remove();
 		};
 
-		var File = function (element, options) {
+		var File                = function (element, options) {
 			element.attr('id', 'vu-' + options.id);
 
-			this.id = options.id;
-			this.guid = null;
+			this.id     = options.id;
+			this.guid   = null;
 			this.errors = [];
 
 			this.name = $('<span/>')
@@ -74,7 +74,7 @@
 		};
 		File.prototype.addError = function (text) {
 			if (this.errors.length == 0) {
-				this.element.prepend($('<div/>').addClass('vu-file-errors').append('ul'));
+				this.element.prepend($('<div/>').addClass('vu-file-errors').append($('<ul/>')));
 			}
 			this.errors.push(text);
 			this.element.find('.vu-file-errors ul').append($('<li/>').html(text));
@@ -82,12 +82,12 @@
 		File.prototype.progress = function (value) {
 			this._progress.set(value);
 		};
-		File.prototype.remove = function () {
+		File.prototype.remove   = function () {
 			this.info.remove();
 			this._progress.remove();
 			this.element.remove();
 		};
-		File.prototype.status = function (name) {
+		File.prototype.status   = function (name) {
 			this.element.removeClass(function (index, css) {
 				var m = css.match(/(^|\s)vu-file-status-\S+/g);
 				if (m == null)
@@ -100,10 +100,10 @@
 
 		var humanSize = function (bytes, decimals) {
 			if (bytes == 0) return '0 Byte';
-			var k = 1024;
-			var dm = decimals + 1 || 3;
+			var k     = 1024;
+			var dm    = decimals + 1 || 3;
 			var sizes = [ 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' ];
-			var i = Math.floor(Math.log(bytes) / Math.log(k));
+			var i     = Math.floor(Math.log(bytes) / Math.log(k));
 			return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[ i ];
 		};
 
@@ -195,16 +195,24 @@
 			.append(btnClear)
 		);
 
+		Flow.prototype.hasErrors = function () {
+			for (var i = 0; i < this.files.length; i++) {
+				if (this.files[ i ].error == true)
+					return true;
+			}
+			return false;
+		};
+
 		var flow = new Flow({
-			target : options.target,
-			uploadMethod : 'POST',
-			chunkSize : options.chunksize,
-			simultaneousUploads : 20,
-			query : options.query,
+			target                   : options.target,
+			uploadMethod             : 'POST',
+			chunkSize                : options.chunksize,
+			simultaneousUploads      : 20,
+			query                    : options.query,
 			generateUniqueIdentifier : function () {
 				return $.ajax({
-					type : 'GET',
-					url : '/uploader/file/guid',
+					type  : 'GET',
+					url   : '/uploader/file/guid',
 					async : false
 				}).responseText;
 			}
@@ -215,7 +223,7 @@
 			for (var i = 0; i < files.length; i++) {
 				var c = $('<div/>').addClass('vu-file-item');
 				fileList.push(new File(c, {
-					id : files[ i ].uniqueIdentifier,
+					id   : files[ i ].uniqueIdentifier,
 					name : files[ i ].name,
 					size : files[ i ].size
 				}));
@@ -253,10 +261,12 @@
 		});
 
 		flow.on('complete', function () {
-			var guids = fileList.map(function (item) {
-				return item.guid;
-			});
-			window.location = '/uploader/file?list=' + guids.join(',');
+			if (!this.hasErrors()) {
+				var guids       = fileList.map(function (item) {
+					return item.guid;
+				});
+				window.location = '/uploader/file?list=' + guids.join(',');
+			}
 		});
 
 		flow.assignBrowse(fileInput);
@@ -266,9 +276,9 @@
 
 	Uploader.prototype.defaults = {
 		extensions : null,
-		messages : {
-			add : 'Add files',
-			clear : 'Clear list',
+		messages   : {
+			add    : 'Add files',
+			clear  : 'Clear list',
 			remove : 'Remove file',
 			select : 'Select files',
 			upload : 'Upload'

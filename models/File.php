@@ -5,17 +5,18 @@
 	use Yii;
 
 	/**
-	 * @property string $dt
-	 * @property string $extension
-	 * @property string $guid
-	 * @property string $message
-	 * @property string $name
-	 * @property string $path
-	 * @property string $size
-	 * @property string $status
-	 * @property int    $userID
+	 * @property string      $dt
+	 * @property string      $extension
+	 * @property string      $guid
+	 * @property string      $message
+	 * @property string      $name
+	 * @property string      $path
+	 * @property string      $size
+	 * @property string      $status
+	 * @property int         $userID
 	 *
 	 * @property-read [[Log]][] $logs
+	 * @property-read string $url
 	 */
 	class File extends \yii\db\ActiveRecord
 	{
@@ -77,6 +78,26 @@
 		}
 
 		/**
+		 * Renames file to new name.
+		 * @param string $newname New file name without extension.
+		 * @return bool
+		 */
+		public function rename ($newname)
+		{
+			$path = Yii::$app->controller->module->filepath . '/' . $this->path;
+			$dir = pathinfo($path, PATHINFO_DIRNAME);
+
+			if (rename($path, $dir . '/' . $newname . '.' . $this->extension))
+			{
+				$this->path = pathinfo($this->path, PATHINFO_DIRNAME) . '/' . $newname . '.' . $this->extension;
+
+				return $this->save();
+			}
+
+			return false;
+		}
+
+		/**
 		 * @inheritdoc
 		 */
 		public function rules ()
@@ -89,6 +110,7 @@
 				[ [ 'guid' ], 'unique' ],
 				[ [ 'guid' ], 'required' ],
 				[ [ 'guid' ], 'string', 'length' => [ 1, 100 ] ],
+				[ [ 'guid' ], 'match', 'pattern' => '/^[\w\d\-\.]+$/', 'message' => Yii::t('vps-uploader', 'GUID should contain only latin letters, numbers and symbols: ._-') ],
 				[ [ 'message' ], 'string' ],
 				[ [ 'name', 'path' ], 'string', 'max' => 100 ],
 				[ [ 'status' ], 'default', 'value' => self::S_NEW ],

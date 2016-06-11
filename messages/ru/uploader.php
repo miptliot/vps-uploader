@@ -1,9 +1,11 @@
 <?php
 	return [
 		'Add files'          => 'Добавить файлы',
+		'Check all'          => 'Выбрать все',
 		'Clear list'         => 'Очистить список',
 		'Extension'          => 'Расширение',
 		'File list'          => 'Список файлов',
+		'File view'          => 'Просмотр файла',
 		'Filesize'           => 'Размер файла',
 		'GUID'               => 'GUID',
 		'In case of error.'  => 'В случае ошибки.',
@@ -17,11 +19,17 @@
 		'Select files'       => 'Выбрать файлы',
 		'Status'             => 'Статус',
 		'Total'              => 'Всего',
+		'Uncheck all'        => 'Развыбрать все',
 		'Unique identifier.' => 'Уникальный идентификатор.',
 		'Upload'             => 'Загрузить',
 		'VPS uploader'       => 'Загрузчик файлов. Крутой',
 
-		'Error saving file to path {path}.' => 'Ошибка при сохранение файла в {path}.',
+		'Copy GUIDs from file names'                                       => 'Скопировать ГУИДы из имён файлов',
+		'Error saving file to path {path}.'                                => 'Ошибка при сохранение файла в {path}.',
+		'File not found.'                                                  => 'Файл не найден.',
+		'Following files were processed.'                                  => 'Следующие файлы были обработаны.',
+		'Following files were NOT processed.'                              => 'Следующие файлы не были обработаны.',
+		'GUID should contain only latin letters, numbers and symbols: ._-' => 'GUID должен содержать только буквы латинского алфавита, цифры и символы: ._-',
 
 		'You should include <a href="https://github.com/flowjs/flow.js">Flow.js</a> library to make this uploader work.' => 'Вы должны подключить библиотеку <a href="https://github.com/flowjs/flow.js">Flow.js</a>, чтобы вся эта дура заработала.',
 	];

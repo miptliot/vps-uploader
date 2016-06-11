@@ -2,10 +2,22 @@
 	namespace vps\uploader;
 
 	use vps\tools\helpers\HumanHelper;
+	use vps\uploader\batch\Batch;
 	use Yii;
 	use yii\base\BootstrapInterface;
 	use yii\base\InvalidConfigException;
 
+	/**
+	 * @property array         $batchActions
+	 * @property int           $chunksize
+	 * @property null|string[] $extensions
+	 * @property null|string   $maxsize
+	 * @property string        $path
+	 * @property string        $url
+	 *
+	 * @property-read string   $filepath
+	 * @property-read string   $tmppath
+	 */
 	class Module extends \yii\base\Module implements BootstrapInterface
 	{
 		/**
@@ -40,6 +52,56 @@
 		public $url = '/uploader/files';
 
 		/**
+		 * List of actions to batch process files.
+		 * @var array Array of associative arrays, which one should consist of title for the select box item, path
+		 *      to the desired action (classname and method name), and unique path to use as value for the select box.
+		 *      To this method parameter guids wil be passed, which is array of file GUIDs.
+		 */
+		private $_batchActions = [
+			[
+				'title'  => 'Copy GUIDs from file names',
+				'method' => [ Batch::class, 'guidFromName' ],
+				'path'   => 'file/copyGUIDs'
+			]
+		];
+
+		/**
+		 * @property-read $batchActions
+		 * @return array
+		 */
+		public function getBatchActions ()
+		{
+			return $this->_batchActions;
+		}
+
+		/**
+		 * Return path to files directory.
+		 * @return string
+		 */
+		public function getFilepath ()
+		{
+			return $this->path . '/files';
+		}
+
+		/**
+		 * Return path to tmp directory.
+		 * @return string
+		 */
+		public function getTmppath ()
+		{
+			return $this->path . '/tmp';
+		}
+
+		/**
+		 * @property-write $batchActions
+		 * @param  array   $actions
+		 */
+		public function setBatchAction ($actions)
+		{
+			$this->_batchActions = array_merge($this->_batchActions, $actions);
+		}
+
+		/**
 		 * @inheritdoc
 		 */
 		public function bootstrap ($app)
@@ -48,14 +110,11 @@
 
 			$app->getUrlManager()->addRules(
 				[
-					'<_m:uploader>/?'                             => '<_m>/uploader/index',
-					'<_m:uploader>/file/?'                        => '<_m>/file/index',
-					'<_m:uploader>/file/index/?'                  => '<_m>/file/index',
-					'<_m:uploader>/file/upload/?'                 => '<_m>/file/upload',
-					'<_m:uploader>/file/add/?'                    => '<_m>/file/add',
-					'<_m:uploader>/file/guid/?'                   => '<_m>/file/guid',
-					'<_m:uploader>/file/<page:[0-9]+>/?'          => '<_m>/file/index',
-					'<_m:uploader>/file/<guid:[a-zA-Z0-9]{5,}>/?' => '<_m>/file/view',
+					'<_m:uploader>/?'                                           => '<_m>/uploader/index',
+					'<_m:uploader>/file/?'                                      => '<_m>/file/index',
+					'<_m:uploader>/file/<action:(index|upload|add|batch|guid)>' => '<_m>/file/<action>',
+					'<_m:uploader>/file/<page:[0-9]+>/?'                        => '<_m>/file/index',
+					'<_m:uploader>/file/<guid:[a-zA-Z0-9]{5,}>/?'               => '<_m>/file/view',
 				]
 			);
 
@@ -70,6 +129,20 @@
 					]
 				];
 			}
+		}
+
+		/**
+		 * Finds batch action by its path.
+		 * @param string $path
+		 * @return null|array
+		 */
+		public function findBatchAction ($path)
+		{
+			foreach ($this->_batchActions as $action)
+				if ($action[ 'path' ] == $path)
+					return $action;
+
+			return null;
 		}
 
 		public function init ()
