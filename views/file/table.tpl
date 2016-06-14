@@ -1,3 +1,6 @@
+{if !isset($last)}
+	{assign 'last' []}
+{/if}
 <table class="table table-striped table-bordered table-hover vu-file-table">
 	<thead>
 		<tr>
@@ -20,7 +23,7 @@
 	</thead>
 	<tbody>
 		{foreach $files as $file}
-			<tr>
+			<tr{if in_array($file->guid, $last)} class="info"{/if}>
 				<td><input type="checkbox" name="file[]" value="{$file->guid}" class="vu-file-check"></td>
 				<td class="vu-file-cell-guid">{Html::a($file->guid, ["file/`$file->guid`"], [ 'class' => 'vu-file-link', 'title' => Yii::t('vps-uploader', 'File view') ])}</td>
 				<td class="vu-file-cell-link">{Html::a($file->path, $file->getUrl(), [ 'class' => 'vu-file-link' ])}</td>

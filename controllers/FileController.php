@@ -94,12 +94,9 @@
 				]
 			]);
 
-			// Uploaded files.
-			$list = Yii::$app->request->get('list');
-			if ($list !== null)
-			{
-				$this->data('uploaded', File::find()->where([ 'guid' => explode(',', $list) ])->orderBy([ 'dt' => SORT_DESC ])->all());
-			}
+			// Last uploaded files.
+			$last = Yii::$app->request->get('last', '');
+			$this->data('last', StringHelper::explode($last));
 
 			// Common files list.
 			$this->data('files', $provider->models);

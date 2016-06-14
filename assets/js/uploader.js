@@ -173,7 +173,7 @@
 			.append(fileInput);
 
 		var btnUpload = $('<div/>')
-			.addClass('btn btn-primary')
+			.addClass('btn btn-success')
 			.html(options.messages.upload)
 			.attr('disabled', 'disabled')
 			.click(function () {
@@ -265,7 +265,7 @@
 				var guids       = fileList.map(function (item) {
 					return item.guid;
 				});
-				window.location = '/uploader/file?list=' + guids.join(',');
+				window.location = '/uploader/file?last=' + guids.join(',');
 			}
 		});
 
