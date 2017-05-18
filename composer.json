@@ -13,7 +13,7 @@
 	"require": {
 		"yiisoft/yii2": ">=2.0.8",
 		"yiisoft/yii2-bootstrap": ">=2.0.0",
-		"miptliot/vps-tools": ">=0.1.5"
+		"pulsarvp/vps-tools": ">=0.1.5"
 	},
 	"autoload": {
 		"psr-4": {
